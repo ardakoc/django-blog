@@ -13,5 +13,10 @@
             {{ post.content|safe }}
         {% endcol %}
     {% endrow %}
+    {% row %}
+        {% col %}
+            {% recent_posts post %}
+        {% endcol %}
+    {% endrow %}
 {% endblock content %}
     
