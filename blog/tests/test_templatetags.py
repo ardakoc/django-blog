@@ -1,9 +1,10 @@
 """
 Tests for custom templatetags and template filters.
 """
-from django.test import TestCase
-from django.contrib.auth import get_user_model
+from django.test import TestCase, Client
+from django.contrib.auth import get_user_model, get_user
 from django.template import Template, Context
+from django.urls import reverse
 
 from blog.templatetags.blog_extras import author_details
 
@@ -16,11 +17,11 @@ class AuthorDetailsFilterTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create(
             username='testuser',
-            password='testpass123',
             first_name='Test',
             last_name='User'
         )
-
+        self.user.set_password('testpass123')
+        self.user.save()
 
     def test_author_details_with_first_and_last_name(self):
         """
@@ -45,7 +46,7 @@ class AuthorDetailsFilterTests(TestCase):
         Test the filter with a non-user object.
         """
         non_user = 'Not a user object'
-        
+
         self.assertEqual(author_details(non_user,), '')
 
     def test_author_details_template_usage(self):
@@ -55,5 +56,20 @@ class AuthorDetailsFilterTests(TestCase):
         template = Template('{% load blog_extras %}{{ user|author_details }}')
         context = Context({'user': self.user})
         rendered = template.render(context)
-        
+
         self.assertEqual(rendered, 'Test User')
+
+    def test_author_details_if_current_user(self):
+        """
+        Test the filter if author is current user.
+        """
+        client = Client()
+        client.login(username='testuser', password='testpass123')
+        response = client.get(reverse('home'))
+        current_user = get_user(client)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            author_details(current_user, current_user),
+            '<strong>me</strong>'
+        )
