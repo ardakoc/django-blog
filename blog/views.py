@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils import timezone
 
 from blog.models import Post
+from blog.forms import CommentForm
 
 
 def index(request):
@@ -11,4 +12,31 @@ def index(request):
 
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
-    return render(request, 'blog/post-detail.html', {'post': post})
+
+    if request.user.is_active:
+        # if user is active
+        if request.method == 'POST':
+            # if request is POST, create a form using the posted data
+            comment_form = CommentForm(request.POST)
+
+            if comment_form.is_valid():
+                # save the form. we won't write Comment obj to the db, instead we will
+                # return it, using the commit=False arg
+                comment = comment_form.save(commit=False)
+                comment.content_object = post
+                comment.creator = request.user
+                comment.save()
+                # perform a redirect back to the current post (refresh the page)
+                return redirect(request.path_info)        
+        else:
+            # if request is not POST, create a blank form
+            comment_form = CommentForm()
+    else:
+        # if user is not active
+        comment_form = None
+
+    return render(
+        request,
+        'blog/post-detail.html',
+        {'post': post, 'comment_form': comment_form}
+    )
