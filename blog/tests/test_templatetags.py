@@ -6,7 +6,8 @@ from django.contrib.auth import get_user_model, get_user
 from django.template import Template, Context
 from django.urls import reverse
 
-from blog.templatetags.blog_extras import author_details
+from blog.templatetags.blog_extras import author_details, recent_posts
+from blog.models import Post
 
 
 class AuthorDetailsFilterTests(TestCase):
@@ -73,3 +74,33 @@ class AuthorDetailsFilterTests(TestCase):
             author_details(current_user, current_user),
             '<strong>me</strong>'
         )
+
+
+class RecentPostsTests(TestCase):
+    """
+    Test recent_posts custom template tag.
+    """
+
+    def setUp(self):
+        self.user = get_user_model().objects.create(
+            username='testuser',
+            first_name='Test',
+            last_name='User'
+        )
+        self.post = Post.objects.create(
+            author=self.user,
+            title='Test Post',
+            content='Test Content'
+        )
+
+    def test_current_post_excluded(self):
+        """
+        Test current post is excluded from recent posts list.
+        """
+        Post.objects.create(author=self.user, title='Another post 1')
+        Post.objects.create(author=self.user, title='Another post 2')
+        rendered = recent_posts(self.post)
+
+        self.assertNotIn(str(self.post), str(rendered))
+        self.assertEqual(len(rendered), 2)
+        self.assertEqual(Post.objects.all().count(), 3)
