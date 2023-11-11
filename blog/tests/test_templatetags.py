@@ -1,13 +1,13 @@
 """
 Tests for custom templatetags and template filters.
 """
-from django.test import TestCase, Client
-from django.contrib.auth import get_user_model, get_user
-from django.template import Template, Context
+from django.contrib.auth import get_user, get_user_model
+from django.template import Context, Template
+from django.test import Client, TestCase
 from django.urls import reverse
 
-from blog.templatetags.blog_extras import author_details, recent_posts
 from blog.models import Post
+from blog.templatetags.blog_extras import author_details, recent_posts
 
 
 class AuthorDetailsFilterTests(TestCase):

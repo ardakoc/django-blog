@@ -1,8 +1,8 @@
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
-from blog.models import Post
 from blog.forms import CommentForm
+from blog.models import Post
 
 
 def index(request):

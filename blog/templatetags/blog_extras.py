@@ -4,7 +4,6 @@ from django.utils.html import format_html
 
 from blog.models import Post
 
-
 register = template.Library()
 
 
