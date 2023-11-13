@@ -4,7 +4,7 @@
 {% for comment in post.comments.all %}
     {% row "border-top pt-2" %}
         {% col %}
-            <h6>Posted by {{ comment.creator }} at {{ comment.created_at|date:"M, d Y h:i" }}</h6>
+            <h6>Posted by {{ comment.creator }} at {{ comment.created_at|date:"M, d Y G:i" }}</h6>
         {% endcol %}
     {% endrow %}
     {% row "border-bottom" %}

@@ -13,6 +13,7 @@ import os
 
 from pathlib import Path
 from configurations import Configuration
+from configurations import values
 
 
 class Dev(Configuration):
@@ -114,7 +115,7 @@ class Dev(Configuration):
 
     LANGUAGE_CODE = 'en-us'
 
-    TIME_ZONE = 'UTC'
+    TIME_ZONE = values.Value('Europe/Istanbul')
 
     USE_I18N = True
 
