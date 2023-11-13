@@ -28,9 +28,9 @@ class Dev(Configuration):
     SECRET_KEY = 'django-insecure-w2-tbnk^@*6^c8$=-!_!0%64a0zz86l1e6d0%ui@@%6ix9=rv*'
 
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
+    DEBUG = values.BooleanValue(True)
 
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = values.ListValue(['localhost', '0.0.0.0', '127.0.0.1'])
 
 
     # Application definition
@@ -135,3 +135,8 @@ class Dev(Configuration):
     CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
     CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+
+class Prod(Dev):
+    DEBUG = False
+    SECRET_KEY = values.SecretValue()
