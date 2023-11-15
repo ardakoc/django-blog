@@ -31,8 +31,7 @@ class Dev(Configuration):
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = values.BooleanValue(True)
 
-    ALLOWED_HOSTS = values.ListValue(['localhost', '0.0.0.0', '127.0.0.1'])
-
+    ALLOWED_HOSTS = INTERNAL_IPS = values.ListValue(['localhost', '0.0.0.0', '127.0.0.1'])
 
     # Application definition
 
@@ -48,9 +47,11 @@ class Dev(Configuration):
 
         'crispy_forms',
         'crispy_bootstrap5',
+        'debug_toolbar',
     ]
 
     MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
