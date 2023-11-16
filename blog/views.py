@@ -11,7 +11,12 @@ logger = logging.getLogger(__name__)
 
 
 def index(request):
-    posts = Post.objects.filter(published_at__lte=timezone.now()).select_related('author').order_by('-published_at')
+    posts = (
+        Post.objects.filter(published_at__lte=timezone.now())
+        .select_related('author')
+        .defer('created_at', 'modified_at')
+        .order_by('-published_at')
+    )
     logger.debug('Got %d posts', len(posts))
     return render(request, 'blog/index.html', {'posts': posts})
 
