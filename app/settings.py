@@ -44,6 +44,7 @@ class Dev(Configuration):
         'django.contrib.staticfiles',
 
         'blog',
+        'blog_auth',
 
         'crispy_forms',
         'crispy_bootstrap5',
@@ -162,6 +163,8 @@ class Dev(Configuration):
         'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
         'django.contrib.auth.hashers.ScryptPasswordHasher',
     ]
+
+    AUTH_USER_MODEL = 'blog_auth.User'
 
 
 class Prod(Dev):
