@@ -166,6 +166,8 @@ class Dev(Configuration):
 
     AUTH_USER_MODEL = 'blog_auth.User'
 
+    LOGOUT_REDIRECT_URL = '/'
+
 
 class Prod(Dev):
     DEBUG = False

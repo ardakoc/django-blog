@@ -2,6 +2,7 @@ import logging
 
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 from blog.forms import CommentForm
 from blog.models import Post
@@ -56,3 +57,8 @@ def post_detail(request, slug):
         'blog/post-detail.html',
         {'post': post, 'comment_form': comment_form}
     )
+
+
+@login_required
+def profile(request):
+    return render(request, 'blog_auth/profile.html')
