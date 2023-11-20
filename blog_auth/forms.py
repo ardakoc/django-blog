@@ -12,4 +12,4 @@ class BlogRegistrationForm(forms.RegistrationForm):
     def __init__(self, *args, **kwargs):
         super(BlogRegistrationForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', 'Register'))    
+        self.helper.add_input(Submit('submit', 'Register'))

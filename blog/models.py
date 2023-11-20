@@ -46,4 +46,3 @@ class AuthorProfile(models.Model):
 
     def __str__(self):
         return f'{self.__class__.__name__} object for {self.user}'
-    
