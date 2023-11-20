@@ -1,12 +1,11 @@
 import logging
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.contrib.auth.decorators import login_required
 
 from blog.forms import CommentForm
 from blog.models import Post
-
 
 logger = logging.getLogger(__name__)
 
