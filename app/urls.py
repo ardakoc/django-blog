@@ -26,10 +26,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='home'),
     path('post/<slug>', views.post_detail, name='blog-post-detail'),
+    path('accounts/', include('blog_auth.urls')),
+    path('accounts/', include('django_registration.backends.activation.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += [
         path('__debug__/', include(debug_toolbar.urls)),
-        path('accounts/', include('blog_auth.urls')),
     ]

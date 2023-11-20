@@ -1,0 +1,10 @@
+Welcome to Django Blog!
+
+You registered for Django Blog, but you need to activate your account within {{ expiration_days }} days.
+
+To do that, please click the link below:
+
+{{ scheme }}://{{ request.get_host }}{% url 'django_registration_activate' activation_key %}
+
+Thanks,
+Django Blog Team!
