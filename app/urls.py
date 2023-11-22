@@ -26,7 +26,6 @@ urlpatterns = [
     path('', views.index, name='home'),
     path('post/<slug>', views.post_detail, name='blog-post-detail'),
     path('accounts/', include('blog_auth.urls')),
-    path('accounts/', include('django_registration.backends.activation.urls')),
 ]
 
 if settings.DEBUG:

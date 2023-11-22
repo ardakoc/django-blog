@@ -6,6 +6,8 @@ from blog_auth.forms import BlogRegistrationForm
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),
+    path('', include('allauth.urls')),
+    path('', include('django_registration.backends.activation.urls')),
     path('profile/', views.profile, name='profile'),
     path(
         'register/',

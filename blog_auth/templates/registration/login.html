@@ -22,6 +22,7 @@
                 <input type="hidden" name="next" value="{{ next }}">
             </form>
             <p><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
+            <p><a href="{% url 'google_login' %}">Log in with Google</a></p>
         {% endcol %}
     {% endrow %}
 {% endblock content %}
