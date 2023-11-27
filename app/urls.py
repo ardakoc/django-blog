@@ -26,6 +26,7 @@ urlpatterns = [
     path('', views.index, name='home'),
     path('post/<slug>', views.post_detail, name='blog-post-detail'),
     path('accounts/', include('blog_auth.urls')),
+    path('api/v1/', include('blog.api.urls')),
 ]
 
 if settings.DEBUG:
