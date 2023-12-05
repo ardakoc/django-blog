@@ -1,4 +1,4 @@
-from blog.models import Post, Tag
+from blog.models import Comment, Post, Tag
 from blog_auth.models import User
 from rest_framework import serializers
 
@@ -30,3 +30,13 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    creator = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'creator', 'content', 'modified_at', 'created_at']
+        readonly = ['modified_at', 'created_at']
