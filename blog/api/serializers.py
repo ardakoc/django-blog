@@ -1,6 +1,7 @@
+from rest_framework import serializers
+
 from blog.models import Comment, Post, Tag
 from blog_auth.models import User
-from rest_framework import serializers
 
 
 class TagField(serializers.SlugRelatedField):

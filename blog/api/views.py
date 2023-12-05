@@ -1,9 +1,11 @@
-from blog.api.permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
-from blog.api.serializers import PostSerializer, PostDetailSerializer, UserSerializer
-from blog.models import Post
-from blog_auth.models import User
 from rest_framework.generics import (ListCreateAPIView, RetrieveAPIView,
                                      RetrieveUpdateDestroyAPIView)
+
+from blog.api.permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
+from blog.api.serializers import (PostDetailSerializer, PostSerializer,
+                                  UserSerializer)
+from blog.models import Post
+from blog_auth.models import User
 
 
 class PostListAPIView(ListCreateAPIView):
