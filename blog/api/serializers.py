@@ -3,6 +3,15 @@ from blog_auth.models import User
 from rest_framework import serializers
 
 
+class TagField(serializers.SlugRelatedField):
+
+    def to_internal_value(self, data):
+        try:
+            return self.get_queryset().get_or_create(value=data.lower())[0]
+        except (TypeError, ValueError):
+            self.fail(f'Tag value {data} is invalid.')
+
+
 class PostSerializer(serializers.ModelSerializer):
     tags = serializers.SlugRelatedField(
         slug_field='value', many=True, queryset=Tag.objects.all()
