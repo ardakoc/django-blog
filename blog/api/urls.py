@@ -4,15 +4,13 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from blog.api.schema.views import schema_view
-from blog.api.views import (PostDetailAPIView, PostListAPIView, TagViewSet,
-                            UserDetailAPIView)
+from blog.api.views import PostViewSet, TagViewSet, UserDetailAPIView
 
 router = DefaultRouter()
 router.register('tags', TagViewSet)
+router.register('posts', PostViewSet)
 
 urlpatterns = [
-    path('posts/', PostListAPIView.as_view(), name='api_post_list'),
-    path('posts/<int:pk>', PostDetailAPIView.as_view(), name='api_post_detail'),
     path('users/<str:email>', UserDetailAPIView.as_view(), name='api_user_detail'),
     # authentication
     path('auth/', include('rest_framework.urls')),
