@@ -1,4 +1,6 @@
+from rest_framework.decorators import action
 from rest_framework.generics import RetrieveAPIView
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from blog.api.permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
@@ -27,3 +29,11 @@ class UserDetailAPIView(RetrieveAPIView):
 class TagViewSet(ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+
+    @action(methods=['get'], detail=True, name='Posts with the Tag')
+    def posts(self, request, pk=None):
+        tag = self.get_object()
+        post_serializer = PostSerializer(
+            tag.posts, many=True, context={'request': request}
+        )
+        return Response(post_serializer.data)
