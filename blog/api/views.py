@@ -1,5 +1,4 @@
-from rest_framework.generics import (ListCreateAPIView, RetrieveAPIView,
-                                     RetrieveUpdateDestroyAPIView)
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.viewsets import ModelViewSet
 
 from blog.api.permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
@@ -9,15 +8,14 @@ from blog.models import Post, Tag
 from blog_auth.models import User
 
 
-class PostListAPIView(ListCreateAPIView):
+class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
-
-class PostDetailAPIView(RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostDetailSerializer
     permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
+
+    def get_serializer_class(self):
+        if self.action in ('list', 'create'):
+            return PostSerializer
+        return PostDetailSerializer
 
 
 class UserDetailAPIView(RetrieveAPIView):
