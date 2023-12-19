@@ -67,3 +67,18 @@ class PostApiTestCase(TestCase):
                     post_dict['published_at'], '%Y-%m-%dT%H:%M:%S.%fZ'
                 ).replace(tzinfo=UTC)
             )
+
+    def test_unauthenticated_post_create(self):
+        # unset credentials
+        self.client.credentials()
+        post_dict = {
+            'title': 'Test Post',
+            'slug': 'test-post-3',
+            'summary': 'Test Summary',
+            'content': 'Test Content',
+            'author': 'http://testserver/api/v1/users/test@example.com',
+            'published_at': '2021-01-10T09:00:00Z',
+        }
+        response = self.client.post('/api/v1/posts/', post_dict)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(Post.objects.all().count(), 2)
