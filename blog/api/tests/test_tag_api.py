@@ -1,6 +1,8 @@
 """
 Tests for tag api.
 """
+from requests.auth import HTTPBasicAuth
+
 from django.contrib.auth import get_user_model
 from django.test import LiveServerTestCase
 from rest_framework.test import RequestsClient
@@ -25,3 +27,11 @@ class TagApiTestCase(LiveServerTestCase):
         data = response.json()
         self.assertEqual(len(data), 4)
         self.assertEqual(self.tag_values, {tag['value'] for tag in data})
+
+    def test_tag_create_basic_auth(self):
+        self.client.auth = HTTPBasicAuth('test@example.com', 'password')
+        response = self.client.post(
+            self.live_server_url + '/api/v1/tags/', {'value': 'tag5'}
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Tag.objects.all().count(), 5)
