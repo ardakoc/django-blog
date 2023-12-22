@@ -21,6 +21,11 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 
 urlpatterns += [
     path('', include(router.urls)),
+    path(
+        'posts/by-time/<str:period_name>/',
+        PostViewSet.as_view({'get': 'list'}),
+        name='posts-by-time',
+    ),
     # documentation
     re_path(
         r'^swagger(?P<format>\.json|\.yaml)$',

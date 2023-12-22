@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django.db.models import Q
+from django.http import Http404
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -29,16 +32,39 @@ class PostViewSet(ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_anonymous:
             # published posts only
-            return self.queryset.filter(published_at__lte=timezone.now())
-        
-        if self.request.user.is_staff:
+            queryset = self.queryset.filter(published_at__lte=timezone.now())
+        elif self.request.user.is_staff:
             # all posts
-            return self.queryset
+            queryset = self.queryset
+        else:
+            # published or own posts
+            queryset = self.queryset.filter(
+                Q(published_at__lte=timezone.now()) | Q(author=self.request.user)
+            )
         
-        # published or own posts
-        return self.queryset.filter(
-            Q(published_at__lte=timezone.now()) | Q(author=self.request.user)
-        )
+        time_period_name = self.kwargs.get('period_name')
+
+        if not time_period_name:
+            # no further filtering required
+            return queryset
+        
+        if time_period_name == 'new':
+            return queryset.filter(
+                published_at__gte=timezone.now() - timedelta(hours=1)
+            )
+        elif time_period_name == 'today':
+            return queryset.filter(
+                published_at__date=timezone.now().date()
+            )
+        elif time_period_name == 'week':
+            return queryset.filter(
+                published_at__gte=timezone.now() - timedelta(days=7)
+            )
+        else:
+            raise Http404(
+                f'Time period {time_period_name} is not valid. '
+                f'It should be "new", "today", or "week".'
+            )
     
     @method_decorator(cache_page(300))
     @method_decorator(vary_on_headers('Authorization'))
