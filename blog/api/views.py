@@ -1,3 +1,5 @@
+from django.db.models import Q
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_headers, vary_on_cookie
@@ -24,6 +26,20 @@ class PostViewSet(ModelViewSet):
             return PostSerializer
         return PostDetailSerializer
     
+    def get_queryset(self):
+        if self.request.user.is_anonymous:
+            # published posts only
+            return self.queryset.filter(published_at__lte=timezone.now())
+        
+        if self.request.user.is_staff:
+            # all posts
+            return self.queryset
+        
+        # published or own posts
+        return self.queryset.filter(
+            Q(published_at__lte=timezone.now()) | Q(author=self.request.user)
+        )
+    
     @method_decorator(cache_page(300))
     @method_decorator(vary_on_headers('Authorization'))
     @method_decorator(vary_on_cookie)
@@ -38,6 +54,8 @@ class PostViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @method_decorator(cache_page(120))
+    @method_decorator(vary_on_headers('Authorization'))
+    @method_decorator(vary_on_cookie)
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
