@@ -209,6 +209,8 @@ class Dev(Configuration):
             'post_api': '50/minute',
             'user_api': '2000/day',
         },
+        'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+        'PAGE_SIZE': 1,
     }
 
     SWAGGER_SETTINGS = {
