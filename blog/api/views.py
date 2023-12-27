@@ -25,6 +25,7 @@ class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
     filterset_class = PostFilterSet
+    ordering_fields = ['published_at', 'author', 'title', 'slug']
 
     def get_serializer_class(self):
         if self.action in ('list', 'create'):
