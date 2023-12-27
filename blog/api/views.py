@@ -23,6 +23,7 @@ from blog_auth.models import User
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
+    filterset_fields = ['author', 'tags']
 
     def get_serializer_class(self):
         if self.action in ('list', 'create'):
