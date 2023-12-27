@@ -13,6 +13,7 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from blog.api.filters import PostFilterSet
 from blog.api.permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
 from blog.api.serializers import (PostDetailSerializer, PostSerializer,
                                   TagSerializer, UserSerializer)
@@ -23,7 +24,7 @@ from blog_auth.models import User
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
-    filterset_fields = ['author', 'tags']
+    filterset_class = PostFilterSet
 
     def get_serializer_class(self):
         if self.action in ('list', 'create'):
